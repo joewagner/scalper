@@ -14,7 +14,6 @@ var scalper = new Scalper({
     store: require('./ticket-store'),
     // authenticate function called by the middleware
     authenticate: function (req) {
-        // may want to sign the user id with a secret
         return (req.user && req.user.id) ? {userId: req.user.id, ip: req.ip} : false;
     }
 });

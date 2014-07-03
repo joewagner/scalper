@@ -3,6 +3,11 @@ scalper
 
 A ticket store designed to allow an application to use an express app to do auth for a socket.io app
 
+Disclaimer
+==========
+
+The current state of this is totally experimental.  I would encourage you to understand all of the code, before using in production
+
 Setup
 =====
 
