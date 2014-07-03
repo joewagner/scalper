@@ -6,7 +6,7 @@ var should = require('should');
 describe('scalper', function () {
 
     it('should export middleware', function (done) {
-        scalper.middleware.should.be.an.instanceOf(Function);
+        scalper.issueTickets.should.be.an.instanceOf(Function);
         done();
     });
 

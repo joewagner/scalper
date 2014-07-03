@@ -11,20 +11,33 @@ var Scalper = function Scalper(options) {
     options || (options = {});
 
     this.store = options.store || new MemoryStore();
-    this.key = options.key || 'user';
-    this.route = options.route || 'socket-token';
-    this.generateToken = options.genToken || genToken;
+    this.authenticate = options.authenticate;
+    this.route = options.route || '/socket-ticket';
+    this.generateTicket = options.genTicket || genTicket;
+
+    // allow passing a string or function for the auth checker
+    if (typeof this.authenticate !== 'function') {
+        // if a non-function is passed, check if the field exists in the request object
+        this.authenticate = function (req) {
+            // default to sending the user id
+            return req.user && (res.user.id || req.user._id);
+        }
+    }
 };
 
-Scalper.prototype.middleware = function () {
+// middleware that issues a one time ticket to requests that pass the authentication function
+Scalper.prototype.issueTickets = function () {
     var self = this;
     return function (req, res, next) {
-        // if this is a GET for the token create it and send it back
-        if (req.method === 'GET' && (req.url === route || req.originalUrl === route)) {
-            var value = req[key];
+        // if this is a GET for a ticket create it and send it back
+        if (req.method === 'GET' && (req.url === self.route || req.originalUrl === self.route)) {
+            var value = self.authenticate(req);
             if (value) {
-                var token = self.generateToken();
-                return store.set(token, value, next);
+                var ticket = self.generateTicket();
+                return self.store.set(ticket, value, function (err) {
+                    if (err) return next(err);
+                    res.send({ticket: ticket});
+                });
             }
         }
         next();
@@ -32,11 +45,11 @@ Scalper.prototype.middleware = function () {
 };
 
 // don't expose the store directly
-Scalper.prototype.get = function (token, done) {
-    this.store.get(token, done);
+Scalper.prototype.get = function (ticket, done) {
+    this.store.get(ticket, done);
 };
 
-function genToken() {
+function genTicket() {
     return uuid.v4();
 }
 
