@@ -1,0 +1,22 @@
+{
+  "name": "scalper",
+  "description": "An authentication ticket store designed to allow using an express app to do auth for a socket.io app",
+  "author": "Joe Wagner",
+  "version": "0.0.1-alpha",
+  "scripts": {
+    "test": "NODE_ENV=test mocha"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "node-uuid": "~1.4.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.0",
+    "should": "~3.3.0"
+  },
+  "engines": { "node": ">=0.10.0" },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:JoeWagner/scalper.git"
+  }
+}
