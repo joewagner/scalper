@@ -39,6 +39,8 @@ Scalper.prototype.issueTickets = function () {
                     res.send({ticket: ticket});
                 });
             }
+            // authentication failed
+            return res.send(401);
         }
         next();
     };
