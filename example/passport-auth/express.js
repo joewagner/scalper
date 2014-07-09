@@ -34,7 +34,7 @@ passport.use(new LocalStrategy(
     // check creds
     userStore.findByUsername(username, function (err, user) {
         if (err) return done(err);
-        if (password === user.password) {
+        if (user && password === user.password) {
             return done(null, user);
         }
         done();
@@ -58,7 +58,7 @@ passport.deserializeUser(function (id, done) {
 
 
 // routing as usual
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/' }));
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login.html', successRedirect: '/' }));
 
 // more routes...
 
