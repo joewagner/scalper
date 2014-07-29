@@ -11,18 +11,13 @@ var Scalper = function Scalper(options) {
     options || (options = {});
 
     this.store = options.store || new MemoryStore();
-    this.authenticate = options.authenticate;
     this.route = options.route || '/socket-ticket';
     this.generateTicket = options.genTicket || genTicket;
+    this.authenticate = options.authenticate || function (req) {
+        // default to sending the user id
+        return req.user && (req.user.id || req.user._id);
+    };
 
-    // allow passing a string or function for the auth checker
-    if (typeof this.authenticate !== 'function') {
-        // if a non-function is passed, check if the field exists in the request object
-        this.authenticate = function (req) {
-            // default to sending the user id
-            return req.user && (req.user.id || req.user._id);
-        }
-    }
 };
 
 // middleware that issues a one time ticket to requests that pass the authentication function
