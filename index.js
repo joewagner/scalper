@@ -20,7 +20,7 @@ var Scalper = function Scalper(options) {
         // if a non-function is passed, check if the field exists in the request object
         this.authenticate = function (req) {
             // default to sending the user id
-            return req.user && (res.user.id || req.user._id);
+            return req.user && (req.user.id || req.user._id);
         }
     }
 };
