@@ -5,7 +5,7 @@
  */
 
 var MemoryStore = require('./memory-store');
-var uuid = require('node-uuid');
+var uuid = require('uuid');
 
 var Scalper = function Scalper(options) {
     options || (options = {});
@@ -23,27 +23,29 @@ var Scalper = function Scalper(options) {
 // middleware that issues a one time ticket to requests that pass the authentication function
 Scalper.prototype.issueTickets = function () {
     var self = this;
-    return function (req, res, next) {
+    return async function (req, res, next) {
         // if this is a GET for a ticket create it and send it back
         if (req.method === 'GET' && (req.url === self.route || req.originalUrl === self.route)) {
             var value = self.authenticate(req);
             if (value) {
-                var ticket = self.generateTicket();
-                return self.store.set(ticket, value, function (err) {
-                    if (err) return next(err);
-                    res.send({ticket: ticket});
-                });
+                try {
+                    var ticket = self.generateTicket();
+                    await self.store.set(ticket, value);
+                    return res.json({ticket: ticket});;
+                } catch (err) {
+                    return next(err);
+                }
             }
             // authentication failed
-            return res.send(401);
+            return res.sendStatus(401);
         }
         next();
     };
 };
 
 // don't expose the store directly
-Scalper.prototype.get = function (ticket, done) {
-    this.store.get(ticket, done);
+Scalper.prototype.get = async function (ticket) {
+    return await this.store.get(ticket);
 };
 
 function genTicket() {

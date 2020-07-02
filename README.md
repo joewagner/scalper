@@ -1,7 +1,7 @@
 scalper
 =======
 
-A ticket store designed to allow an application to use an express app to do auth for a socket.io app
+A ticket store designed to allow an application to use an express app to do auth for a socket.io app.  compatible with Express 4
 
 Installation
 ============
@@ -25,13 +25,7 @@ A store should expose a `get` and a `set` method.
 `get` should take two arguments. A key and a callback.
 *Important* `get` should delete the ticket as soon as its retrieved, so that tickets can not be used twice.
 
-Look at [mongo-ticket](https://github.com/JoeWagner/mongo-ticket) for an example implementation with mongodb.
-
-Setup
-=====
-
-See `example/passport-auth/` for basic usage with express 4, passport, and socket.io.  Notice the socket.io server and the express server are completely separated.  They could potentially be hosted on separate domains without issue.
-Worth noting that the example uses http for simplicity, but its recommended to use https.
+Look at [redis-ticket](https://github.com/JoeWagner/redis-ticket) for an example implementation with mongodb.
 
 Motivation
 ==========

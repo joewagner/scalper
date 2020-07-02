@@ -21,7 +21,7 @@ describe('scalper', function () {
             };
 
             var res = {
-                send: function (status) {
+                sendStatus: function (status) {
                     status.should.equal(401);
                     done();
                 }
@@ -55,7 +55,7 @@ describe('scalper', function () {
                 url: '/socket-ticket'
             };
             var res = {
-                send: function (data) {
+                json: function (data) {
                     should.exist(data.ticket);
                     count.should.equal(1);
                     done();
@@ -75,7 +75,7 @@ describe('scalper', function () {
                 }
             };
             var res = {
-                send: function (data) {
+                json: function (data) {
                     should.exist(data.ticket);
                     done();
                 }
@@ -94,7 +94,7 @@ describe('scalper', function () {
                 }
             };
             var res = {
-                send: function (data) {
+                json: function (data) {
                     should.exist(data.ticket);
                     done();
                 }
@@ -126,7 +126,7 @@ describe('scalper', function () {
                 }
             };
             var res = {
-                send: function (data) {
+                json: function (data) {
                     should.exist(data.ticket);
                     Object.keys(memStore.tickets).length.should.equal(1);
                     done();
@@ -162,7 +162,7 @@ describe('scalper', function () {
 
             var middleware = scalper.issueTickets();
             middleware(req, res, function () {
-                res.send = function (data) {
+                res.json = function (data) {
                     should.exist(data.ticket);
                     done();
                 };
@@ -189,7 +189,7 @@ describe('scalper', function () {
                 }
             };
             var res = {
-                send: function (data) {
+                json: function (data) {
                     should.exist(data.ticket);
                     data.ticket.should.equal('custom-value');
                     done();
